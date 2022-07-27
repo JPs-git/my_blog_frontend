@@ -1,32 +1,39 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+    <div class="wrap">
+      <SideBar class="left"/>
+      <div class="right">
+        <TopBar class="top"/>
+        <div class="banner">
+          <router-view/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+<script>
+import SideBar from '@/components/SideBar/index.vue'
+import TopBar from '@/components/TopBar/index.vue'
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+export default {
+    components: { SideBar, TopBar }
 }
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+</script>
+<style lang="less" scoped>
+.wrap{
+  display: flex;
+  height: 100%;
+  background-color: rgb(36,39,59);
+  .left{
+    display: fixed;
+  }
+  .right{
+    flex-grow: 1;
+    .top{
+      align-self: start;
     }
+
   }
 }
+  
 </style>
