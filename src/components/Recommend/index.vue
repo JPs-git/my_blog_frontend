@@ -67,13 +67,14 @@ export default {
 
 <style lang="less" scoped>
 .reco {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   a {
     text-decoration: none;
   }
   .re {
-    width: 300px;
+    width: 250px;
     background-color: rgb(21, 23, 40);
     border-radius: 5px;
 

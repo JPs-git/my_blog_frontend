@@ -34,7 +34,7 @@ export default {
 
 <style lang="less" scoped>
 .notice {
-  width: 250px;
+  width:200px;
   padding: 30px;
   background-color: rgb(21, 23, 40);
   border-bottom: 1px solid rgba(155, 155, 171, 0.3);
@@ -48,13 +48,14 @@ export default {
   
 
     .title {
-      padding: 20px;
+      padding: 20px 20px 0 20px;
       color: rgb(202, 199, 219);
       text-shadow: 0 0 5px black;
     }
     .abstract {
       padding: 20px;
-      height: 94px;
+      line-height:18px;
+      height: 54px;
       overflow: hidden;
       word-break: break-all;
       a {

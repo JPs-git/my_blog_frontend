@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title">
+    <div class="content-title">
       <h1>{{ title }}</h1>
     </div>
     <div class="info">
@@ -49,11 +49,12 @@ export default {
 }
 </script>
 
-
 <style lang="less">
   @import url(./css/markdown.less);
+</style>
+<style lang="less" scoped>
 
-  .title{
+  .content-title{
     padding: 30px;
     h1 {
       font-size: 36px;

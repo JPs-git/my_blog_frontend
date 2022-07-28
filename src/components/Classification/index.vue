@@ -55,8 +55,8 @@ export default {
 
 <style lang="less" scoped>
   .classification{
-    width: 250px;
-    height: 207px;
+    width: 200px;
+    height: 185px;
     padding: 30px;
     background-color: rgb(21, 23, 40);
     overflow: auto;

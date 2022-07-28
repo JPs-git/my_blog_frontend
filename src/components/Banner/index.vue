@@ -30,10 +30,10 @@ export default {
 
 <style lang="less" scoped>
   .banner{
-    // width: 100%;
+    width: 900px;
     position: relative;
     .top-img{
-      height: 280px;
+      height: 200px;
       background: url(@/assets/img/background_01.jpg) ;
       background-size: cover;
     }

@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div class="wrap">
-      <SideBar class="left"/>
-      <div class="right">
-        <TopBar class="top"/>
-        <div class="router">
+    <div class="app-wrap">
+      <SideBar class="app-left"/>
+      <div class="app-right">
+        <TopBar class="app-top"/>
+        <div class="app-router">
           <router-view/>
         </div>
       </div>
@@ -16,12 +16,7 @@ import SideBar from '@/components/SideBar/index.vue'
 import TopBar from '@/components/TopBar/index.vue'
 
 export default {
-    components: { SideBar, TopBar },
-    // beforeCreate(){
-    //   const body = document.querySelector('body')
-    //   console.log(body.style.height)
-    // }
-    
+    components: { SideBar, TopBar },   
 }
 </script>
 <style lang="less">
@@ -30,13 +25,15 @@ html, body, #app{
   background-color: rgb(36,39,59);
 
 }
-.wrap{
+.app-wrap{
   display: flex;
   height: 100%;
   align-items: start;
  
-  
-  .right{
+  .app-left{
+    width: 300px;
+  }
+  .app-right{
     flex-grow: 1;
   }
 

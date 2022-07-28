@@ -33,7 +33,7 @@ export default {
     .main{
       margin-top: 30px;
       margin-left: 30px;
-      width: 1000px;
+      // width: 1000px;
       .recommend{
         margin-top: 30px;
       }

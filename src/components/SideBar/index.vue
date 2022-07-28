@@ -48,6 +48,7 @@ a {
     background-color: rgb(@main-color);
     color: rgb(@content-color);
     .logo{
+      // width: 300px;
       display: block;
       height: 100px;
       text-align: center;
