@@ -1,6 +1,6 @@
 <template>
   <div class="left-bar">
-      <a href="#" class="logo">C N B L O G</a>
+      <a href="#" class="logo"><h1>C N B L O G</h1></a>
 
       <div class="menu">
         <div class="menu-title">MENU</div>
@@ -43,6 +43,8 @@ a {
 
   .left-bar{
     width: 300px;
+    height: 100vh;
+    overflow: hidden;
     background-color: rgb(@main-color);
     color: rgb(@content-color);
     .logo{
@@ -53,19 +55,20 @@ a {
       font-size: 20px;
       font-weight: bold;
       color: white;
+      &:hover h1{
+        text-shadow: 0 0 10px white;
+      }
     }
     .menu, .favorite{
       margin-left: 30px;
     }
-    .menu .menu-title{
-      margin-bottom: 50px;
-    }
-    .favorite{
-      margin-top: 80px;
+    .menu{
+      height: 400px;
     }
     .my-git{
-      // height: 30px;
-      margin-top: 180px;
+      // margin-top: 180px;
+      margin-top: 140px;
+      height: 50px;
       padding: 20px;
       border-top: 1px solid rgb(@content-color);
     }

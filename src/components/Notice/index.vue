@@ -39,7 +39,7 @@ export default {
   background-color: rgb(21, 23, 40);
   border-bottom: 1px solid rgba(155, 155, 171, 0.3);
   .cover img {
-    width: 200px;
+    width: 250px;
   }
   .wrapper{
     border-radius: 5px;

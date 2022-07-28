@@ -4,7 +4,7 @@
       <SideBar class="left"/>
       <div class="right">
         <TopBar class="top"/>
-        <div class="banner">
+        <div class="router">
           <router-view/>
         </div>
       </div>
@@ -16,24 +16,30 @@ import SideBar from '@/components/SideBar/index.vue'
 import TopBar from '@/components/TopBar/index.vue'
 
 export default {
-    components: { SideBar, TopBar }
+    components: { SideBar, TopBar },
+    // beforeCreate(){
+    //   const body = document.querySelector('body')
+    //   console.log(body.style.height)
+    // }
+    
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
+html, body, #app{
+  height: 100%;
+  background-color: rgb(36,39,59);
+
+}
 .wrap{
   display: flex;
   height: 100%;
-  background-color: rgb(36,39,59);
-  .left{
-    display: fixed;
-  }
+  align-items: start;
+ 
+  
   .right{
     flex-grow: 1;
-    .top{
-      align-self: start;
-    }
-
   }
+
 }
   
 </style>

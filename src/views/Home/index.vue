@@ -29,6 +29,7 @@ export default {
   .Home{
     display: flex;
     justify-content: space-between;
+ 
     .main{
       margin-top: 30px;
       margin-left: 30px;
