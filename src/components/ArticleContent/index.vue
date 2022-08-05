@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="article-content">
     <div class="content-title">
       <h1>{{ title }}</h1>
     </div>
@@ -37,10 +37,11 @@ export default {
         pubDate:'2022-7-27'
       },
       // Markdown字符串
-      markdownStr:'## This is h2'
+      markdownStr:'# This is h1 \n ## This is h2 \n '
     }
   },
   computed:{
+    // 渲染Markdown
     mainContent(){
       const md = new MarkdownIt()
       return  md.render(this.markdownStr)
@@ -53,7 +54,10 @@ export default {
   @import url(./css/markdown.less);
 </style>
 <style lang="less" scoped>
-
+  .article-content{
+    // width: 1000px;
+    flex-grow: 1;
+  }
   .content-title{
     padding: 30px;
     h1 {
@@ -67,6 +71,7 @@ export default {
     color: rgba(155, 155, 171, 0.5);
   }
   .main{
+    height: 380px;
     padding: 20px;
     font-size: 20px;
     color: rgb(187, 187, 197);

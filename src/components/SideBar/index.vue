@@ -1,15 +1,15 @@
 <template>
   <div class="left-bar">
-      <a href="#" class="logo"><h1>C N B L O G</h1></a>
+      <a href="javascript:;" class="logo" @click="goIndex"><h1>C N B L O G</h1></a>
 
       <div class="menu">
         <div class="menu-title">MENU</div>
         <ul>
-          <li><a href=""><i class="fas fa-home"></i> 首页</a></li>
-          <li><a href=""><i class="fas fa-book"></i> 新随笔</a></li>
-          <li><a href=""><i class="fas fa-mail-bulk"></i> 联系</a></li>
-          <li><a href=""><i class="fas fa-wifi"></i> 订阅</a></li>
-          <li><a href=""><i class="fas fa-cog"></i> 管理</a></li>
+          <li><a href="javascript:;" @click="switchRoute('/')"><i class="fas fa-home"></i> 首页</a></li>
+          <li><a href="javascript:;" @click="switchRoute('list')"><i class="fas fa-book"></i> 文章</a></li>
+          <li><a href="javascript:;" @click="switchRoute('contact')"><i class="fas fa-mail-bulk"></i> 联系</a></li>
+          <li><a href="javascript:;" @click="switchRoute('subscribe')"><i class="fas fa-wifi"></i> 订阅</a></li>
+          <!-- <li><a href="javascript:;"><i class="fas fa-cog"></i> 管理</a></li> -->
         </ul>
       </div>
       <div class="favorite">
@@ -17,8 +17,8 @@
           FAVORITE
         </div>
         <ul>
-          <li><a href="">友链</a></li>
-          <li><a href="">留言板</a></li>
+          <li><a href="javascript:;">友链</a></li>
+          <li><a href="javascript:;" @click="switchRoute('msgboard')">留言板</a></li>
         </ul>
       </div>
       <div class="my-git">
@@ -30,7 +30,20 @@
 
 <script>
 export default {
-
+  methods:{
+    switchRoute(path){
+      this.$router.push(path)
+    },
+    goList(){
+      this.$router.push({path:'/list'})
+    },
+    goIndex(){
+      this.$router.push('/')
+    },
+    goContact(){
+      this.$router
+    }
+  }
 }
 </script>
 
