@@ -1,52 +1,61 @@
 <template>
   <div class="article-content">
     <div class="content-title">
-      <h1>{{ title }}</h1>
+      <h1>{{ article.title }}</h1>
     </div>
     <div class="info">
-      <i class="fas fa-eye"></i> {{ info.views}}&nbsp;&nbsp;&nbsp;
-      <i class="fas fa-thumbs-up"></i> {{ info.likes}}&nbsp;&nbsp;&nbsp;
-      <i class="fas fa-comment-dots"></i> {{ info.comments}}&nbsp;&nbsp;&nbsp;
-      <span class="pub-date">{{ info.pubDate}}</span>
+      <i class="fas fa-eye"></i> {{ article.views}}&nbsp;&nbsp;&nbsp;
+      <i class="fas fa-thumbs-up"></i> {{ article.likes}}&nbsp;&nbsp;&nbsp;
+      <i class="fas fa-comment-dots"></i> {{ article.comments}}&nbsp;&nbsp;&nbsp;
+      <span class="pub-date">{{ article.pubDate}}</span>
     </div>
-    <div class="main markdown-body" v-html="mainContent">
+    <div class="main markdown-body" v-html="mainContent(article.mainContent)">
     </div>
 
     
 
     <div class="btns">
       &nbsp;&nbsp;&nbsp;
-      <i class="fas fa-eye"></i>  {{ info.views}}&nbsp;&nbsp;&nbsp;
-      <a href=""><i class="fas fa-thumbs-up"></i></a> {{ info.likes}}&nbsp;&nbsp;&nbsp;
-      <a href=""><i class="fas fa-comment-dots"></i></a> {{ info.comments}}
+      <i class="fas fa-eye"></i>  {{ article.views}}&nbsp;&nbsp;&nbsp;
+      <a href=""><i class="fas fa-thumbs-up"></i></a> {{ article.likes}}&nbsp;&nbsp;&nbsp;
+      <a href=""><i class="fas fa-comment-dots"></i></a> {{ article.comments}}
     </div>
   </div>
 </template>
 
 <script>
 import MarkdownIt from 'markdown-it'
-
+import { mapState } from 'vuex'
 export default {
-  data() {
-    return {
-      title: '如何搭建自己的博客',
-      info: {
-        views: 0,
-        likes: 0,
-        comments: 0,
-        pubDate:'2022-7-27'
-      },
-      // Markdown字符串
-      markdownStr:'# This is h1 \n ## This is h2 \n '
-    }
-  },
+  // data() {
+  //   return {
+  //     title: '如何搭建自己的博客',
+  //     info: {
+  //       views: 0,
+  //       likes: 0,
+  //       comments: 0,
+  //       pubDate:'2022-7-27'
+  //     },
+  //     // Markdown字符串
+  //     markdownStr:'# This is h1 \n ## This is h2 \n '
+  //   }
+  // },
   computed:{
+    // 文章数据
+    ...mapState('article', ['article']),
+  },
+  methods:{
     // 渲染Markdown
-    mainContent(){
+    mainContent(markdown_str){
       const md = new MarkdownIt()
-      return  md.render(this.markdownStr)
+      if(markdown_str){
+        return md.render(markdown_str)
+      }
     }
   },
+  mounted(){
+    this.$store.dispatch('article/getArticleById', this.$route.query.id)
+  }
 }
 </script>
 

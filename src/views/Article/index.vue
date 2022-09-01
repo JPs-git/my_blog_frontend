@@ -9,6 +9,7 @@ import ArticleContent from '@/components/ArticleContent/index.vue'
 import Comments from '@/components/Comments/index.vue'
 
 export default {
+  name:'Article',
   components:{
     ArticleContent,
     Comments,
