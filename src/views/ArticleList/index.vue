@@ -1,12 +1,14 @@
 <template>
   <div class="list">
     <ul class="outer">
-      <li>
-        <div class="title">2 0 2 2</div>
+      <li v-for="(year, index) in classifiedArticleList" :key="index">
+        <div class="title" v-text="getYear(year[0].pubDate)"></div>
         <ul class="inner">
-          <li v-for="(article, index) in articleList" :key="index">
-            <a href="javascript:;" @click="goDetail(article._id)">{{ article.title }}</a>
-            <span class="date">{{ article.pubDate.slice(0, 10) }}</span>
+          <li v-for="(article, index) in year" :key="index">
+            <a href="javascript:;" @click="goDetail(article._id)">{{
+              article.title
+            }}</a>
+            <span class="date" v-text="fullDate(article.pubDate)"></span>
           </li>
         </ul>
       </li>
@@ -16,21 +18,47 @@
 
 <script>
 import { mapState } from 'vuex'
+import dateFomat from '@/utils/dateFomat'
 export default {
-  name:'ArticleList',
+  name: 'ArticleList',
   data() {
-    return {
-    }
+    return {}
   },
-  computed:{
-    // articleList(){
-    //   return this.$store.state.article.articleList
-    // },
-    ...mapState('article', ['articleList'])
+  computed: {
+    ...mapState('article', ['articleList']),
+
+    // 根据文章发布年份分类的二维数组
+    classifiedArticleList() {
+      let list = this.articleList
+      let res = []
+      let cru_year
+      let arr
+      // 此处需要后端返回发布时间按照由近及远的有序数据
+      if (list.length) {
+        list.forEach((article) => {
+          if (dateFomat(article.pubDate).y === cru_year) {
+            arr.push(article)
+          } else {
+            // 与当前年份不同
+            res.push((arr = [article]))
+            cru_year = dateFomat(article.pubDate).y
+          }
+        })
+      }
+      return res
+    },
   },
-  methods:{
-    goDetail(id){
-      this.$router.push({path:'/article', query:{ id }})
+  methods: {
+    goDetail(id) {
+      this.$router.push({ path: '/article', query: { id } })
+    },
+    // 输入时间戳 返回格式化日期
+    fullDate(timestamp) {
+      return dateFomat(timestamp).fullDate
+    },
+    // 输入时间戳 返回年份
+    getYear(timestamp){
+      return dateFomat(timestamp).y
     }
   },
   mounted() {
