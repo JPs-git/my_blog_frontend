@@ -4,26 +4,26 @@
       <h1>
         发表评论 <span>{{ errs.context }}</span>
       </h1>
-      <textarea v-model="context"></textarea>
+      <textarea v-model="commentData.context"></textarea>
       <h2>
-        昵称 <span>{{ errs.nickName }}</span>
+        昵称 <span>{{ errs.nickname }}</span>
       </h2>
       <input
         type="text"
         class="name"
-        v-model="nickName"
+        v-model="commentData.nickname"
         @blur="checkNickName"
       />
       <br />
       <h2>
         邮箱 <span>{{ errs.email }}</span>
       </h2>
-      <input type="text" class="e-mail" v-model="email" @blur="checkEmail" />
+      <input type="text" class="e-mail" v-model="commentData.email" @blur="checkEmail" />
       <br />
       <h2>
         链接 <span>{{ errs.linkURL }}</span>
       </h2>
-      <input type="text" class="link" v-model="linkURL" @blur="checkURL" />
+      <input type="text" class="link" v-model="commentData.linkURL" @blur="checkURL" />
       <a href="javascript:;" class="submit" @click="submitComment">
         发表评论
       </a>
@@ -37,12 +37,17 @@ export default {
   name: 'Comments',
   data() {
     return {
-      nickName: '',
-      email: '',
-      linkURL: '',
-      context: '',
+      commentData:{
+        nickname: '',
+        email: '',
+        linkURL: '',
+        context: '',
+        comment_type:'',
+        article_id:''
+      },
+      
       errs: {
-        nickName: '',
+        nickname: '',
         email: '',
         linkURL: '',
         context: '',
@@ -56,46 +61,58 @@ export default {
       await this.checkEmail()
       await this.checkURL()
       await validator
-        .isNotEmpty(this.context)
+        .isNotEmpty(this.commentData.context)
         .then(() => (this.errs.context = ''))
         .catch((reason) => (this.errs.context = reason))
       if (
-        this.errs.nickName === '' &&
+        this.errs.nickname === '' &&
         this.errs.email === '' &&
-        this.errs.linkURL === ''
+        this.errs.linkURL === '' &&
+        this.errs.context === ''
+        
       ) {
         // 发请求
-        console.log('ok')
+        // 设置评论类型
+        if(this.$route.fullPath === '/msgboard'){
+          this.commentData.comment_type = 'msgboard'
+        }else{
+          this.commentData.comment_type = 'article'
+          this.commentData.article_id = this.$route.query.id
+        }
+        await this.$store.dispatch('comment/newComment', this.commentData)
+        // 同时更新页面
+        this.$bus.$emit('refresh_comment')
       }
     },
     checkNickName() {
       Promise.all([
-        validator.isNotEmpty(this.nickName),
-        validator.checkChar(this.nickName),
-        validator.checkLength(this.nickName, 3, 10), // 最小3个字符最长10个字符
+        validator.isNotEmpty(this.commentData.nickname),
+        validator.checkChar(this.commentData.nickname),
+        validator.checkLength(this.commentData.nickname, 3, 10), // 最小3个字符最长10个字符
       ])
         .then(() => {
-          this.errs.nickName = ''
+          this.errs.nickname = ''
         })
-        .catch((reason) => (this.errs.nickName = reason))
+        .catch((reason) => (this.errs.nickname = reason))
     },
     checkEmail() {
       Promise.all([
-        validator.isNotEmpty(this.email),
-        validator.checkEmail(this.email),
+        validator.isNotEmpty(this.commentData.email),
+        validator.checkEmail(this.commentData.email),
       ])
         .then((this.errs.email = ''))
         .catch((reason) => (this.errs.email = reason))
     },
     checkURL() {
       Promise.all([
-        validator.isNotEmpty(this.linkURL),
-        validator.checkUrl(this.linkURL),
+        validator.isNotEmpty(this.commentData.linkURL),
+        validator.checkUrl(this.commentData.linkURL),
       ])
         .then((this.errs.linkURL = ''))
         .catch((reason) => (this.errs.linkURL = reason))
     },
   },
+ 
 }
 </script>
 

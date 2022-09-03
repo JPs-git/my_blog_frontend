@@ -13,6 +13,10 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 new Vue({
+  beforeCreate(){
+    // 安装全局事件总线
+    Vue.prototype.$bus = this
+  },
   router,
   store,
   render: h => h(App)

@@ -7,3 +7,7 @@ export const reqTest = () => requests({ url: 'articles/test', method: 'get' })
 export const reqArticleList = () => requests({url:'articles', method:'get'} )
 // 获取指定id文章
 export const reqArticleById = (id) => requests({url:`articles/${id}`, method:'get'})
+// 新增评论
+export const reqNewComment = data => requests({url:'comments', method:'post', data})
+// 获取留言板评论 
+export const reqMsgboard = () => requests({url:'comments/msgboard', method:'get'})

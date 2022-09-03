@@ -4,7 +4,7 @@
       <SideBar class="app-left" />
       <div class="app-right">
         <TopBar class="app-top" />
-        <div class="app-router">
+        <div class="app-router" ref="router">
           <router-view />
         </div>
       </div>
@@ -17,6 +17,14 @@ import TopBar from '@/components/TopBar/index.vue'
 
 export default {
   components: { SideBar, TopBar },
+  methods:{
+    goTop(){
+      this.$refs.router.scrollTop = 0
+    }
+  },
+  mounted(){
+    this.$bus.$on('goTop',this.goTop)
+  }
 }
 </script>
 <style lang="less">
