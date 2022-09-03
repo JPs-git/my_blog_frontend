@@ -1,5 +1,5 @@
 <template>
-  <div class="comments">
+  <div class="comments clearfix">
     <div class="wrapper">
       <h1>
         发表评论 <span>{{ errs.context }}</span>

@@ -23,37 +23,38 @@
           </li>
         </ul>
       </div>
+      <!-- 分页器 -->
+      <div class="fr page clearfix">
+      <div class="sui-pagination clearfix">
+        <ul>
+          <li class="prev disabled">
+            <a href="#">«上一页</a>
+          </li>
+          <li class="active">
+            <a href="#">1</a>
+          </li>
+          <li>
+            <a href="#">2</a>
+          </li>
+          <li>
+            <a href="#">3</a>
+          </li>
+          <li>
+            <a href="#">4</a>
+          </li>
+          <li>
+            <a href="#">5</a>
+          </li>
+          <li class="dotted"><span>...</span></li>
+          <li class="next">
+            <a href="#">下一页»</a>
+          </li>
+        </ul>
+        <div><span>共10页&nbsp;</span></div>
+      </div>
+      </div>
     </div>
-    <!-- 分页器 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+    
     <Comments />
   </div>
 </template>
@@ -80,8 +81,8 @@ export default {
       )
     },
     // 确认前往外部网站
-    goOuterSite(linkURL){
-      if(confirm(`您即将前往外部网站http://${linkURL}，可能存在风险!`)){
+    goOuterSite(linkURL) {
+      if (confirm(`您即将前往外部网站http://${linkURL}，可能存在风险!`)) {
         window.open('http://' + linkURL)
       }
     },
@@ -99,6 +100,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@deep_backgrd_color:rgb(28,31,47);
+@light_backgrd_color:rgb(36,39,59);
+@light_font_color:rgb(149, 153, 156);
+@light_border_color:rgba(142, 148, 154, 0.3);
 .wrapper {
   width: 800px;
   margin: 0 auto;
@@ -116,7 +121,7 @@ export default {
         margin-top: 10px;
         a {
           color: rgb(108, 110, 112);
-          &:hover{
+          &:hover {
             text-decoration: underline;
             text-shadow: 0 0 2px rgb(108, 110, 112);
           }
@@ -136,5 +141,97 @@ export default {
       }
     }
   }
+  .page {
+        width: 733px;
+        height: 66px;
+        overflow: hidden;
+        margin:  0 auto;
+        .sui-pagination {
+          margin: 18px 0;
+
+          ul {
+            margin-left: 0;
+            margin-bottom: 0;
+            vertical-align: middle;
+            width: 490px;
+            float: left;
+
+            li {
+              line-height: 18px;
+              display: inline-block;
+
+              a {
+                position: relative;
+                float: left;
+                line-height: 18px;
+                text-decoration: none;
+                background-color: @deep_backgrd_color;
+                border: 1px solid rgba(142, 148, 154, 0.3);
+                margin-left: -1px;
+                font-size: 14px;
+                padding: 9px 18px;
+                color: @light_font_color;
+              }
+
+              &.active {
+                a {
+                  background-color: @deep_backgrd_color;
+                  color: #fff;
+                  border-color: rgba(142, 148, 154, 0.3);
+                  cursor: default;
+                }
+              }
+
+              &.prev {
+                a {
+                  background-color: @deep_backgrd_color;
+                }
+              }
+
+              &.disabled {
+                a {
+                  color: #999;
+                  cursor: default;
+                }
+              }
+
+              &.dotted {
+                span {
+                  margin-left: -1px;
+                  position: relative;
+                  float: left;
+                  line-height: 18px;
+                  text-decoration: none;
+                  background-color: @light_backgrd_color;
+                  font-size: 14px;
+                  border-left: 1px solid @light_border_color;
+                  border-right: 1px solid @light_border_color;
+                  padding: 9px 18px;
+                  color: @light_font_color;
+                }
+              }
+
+              &.next {
+                a {
+                  background-color: @deep_backgrd_color;
+                }
+              }
+            }
+          }
+
+          div {
+
+            color: @light_font_color;
+            line-height: 14px;
+            font-size: 14px;
+            float: right;
+            width: 241px;
+            span {
+              display: block;
+              margin-top: 10px;
+            }
+          }
+        }
+      }
 }
 </style>
