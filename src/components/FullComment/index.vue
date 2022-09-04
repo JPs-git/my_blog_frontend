@@ -25,36 +25,31 @@
       </div>
       <!-- 分页器 -->
       <div class="fr page clearfix">
-      <div class="sui-pagination clearfix">
-        <ul>
-          <li class="prev disabled">
-            <a href="#">«上一页</a>
-          </li>
-          <li class="active">
-            <a href="#">1</a>
-          </li>
-          <li>
-            <a href="#">2</a>
-          </li>
-          <li>
-            <a href="#">3</a>
-          </li>
-          <li>
-            <a href="#">4</a>
-          </li>
-          <li>
-            <a href="#">5</a>
-          </li>
-          <li class="dotted"><span>...</span></li>
-          <li class="next">
-            <a href="#">下一页»</a>
-          </li>
-        </ul>
-        <div><span>共10页&nbsp;</span></div>
-      </div>
+        <div class="sui-pagination clearfix">
+          <ul @click="switchPage">
+            <li class="prev disabled" ref="prev">
+              <a href="javascript:;">«上一页</a>
+            </li>
+            <li
+              v-for="(page, index) in total > 5 ? 5 : total"
+              :key="index"
+              :class="{active: skip  === index}"
+            >
+              <a href="javascript:;">{{ page }}</a>
+            </li>
+
+            <li class="dotted" v-if="total > 5"><span>...</span></li>
+            <li class="next" ref="next">
+              <a href="javascript:;" >下一页»</a>
+            </li>
+          </ul>
+          <div>
+            <span>共{{ total }}页&nbsp;</span>
+          </div>
+        </div>
       </div>
     </div>
-    
+
     <Comments />
   </div>
 </template>
@@ -64,10 +59,15 @@ import Comments from '@/components/Comments/index.vue'
 import { mapState } from 'vuex'
 import dateFomat from '@/utils/dateFomat'
 export default {
-  name: 'MsgBoard',
+  name: 'FullComment',
   components: { Comments },
+  data(){
+    return {
+      skip:0
+    }
+  },
   computed: {
-    ...mapState('comment', ['MsgBoard']),
+    ...mapState('comment', ['MsgBoard', 'total']),
   },
   methods: {
     // 发布时间
@@ -88,12 +88,54 @@ export default {
     },
     // 刷新页面 并回到顶部
     refreshPage() {
-      this.$store.dispatch('comment/getMsgboard')
+      this.$store.dispatch('comment/getMsgboard', this.skip)
       this.$bus.$emit('goTop')
     },
+    // 切换分页
+    switchPage(e){
+      const el = e.target.parentNode
+      
+      // 修改参数重发请求
+      // 点击的是上一页
+      if(el.className.indexOf('prev') !== -1 ){
+        // 没有禁用
+        if(el.className.indexOf('disabled') === -1){
+          this.skip --
+          this.refreshPage()
+        }
+      // 点击的是下一页
+      }else if(el.className.indexOf('next') !== -1){
+        // 没有禁用
+        if(el.className.indexOf('disabled') === -1){
+          this.skip ++
+          this.refreshPage()
+        }
+      // 点击的是页码
+      }else if(e.target){
+        // 不是当前活动项
+        if(el.className.indexOf('active') === -1){
+          this.skip = Number(e.target.innerHTML) - 1
+          this.refreshPage()
+        }
+      }
+
+      // 判断是否禁用上一页/下一页
+      //先清除
+      this.$refs.prev.classList.remove('disabled')
+      this.$refs.next.classList.remove('disabled')
+      
+      // 已经是第一页则禁用上一页
+      if(this.skip === 0){
+        this.$refs.prev.classList.add('disabled')
+      }
+      // 已经是最后一页则禁用下一页
+      if(this.skip === this.total  - 1){
+        this.$refs.next.classList.add('disabled')
+      }
+    }
   },
   mounted() {
-    this.$store.dispatch('comment/getMsgboard')
+    this.refreshPage()
     this.$bus.$on('refresh_comment', this.refreshPage)
   },
 }
@@ -142,94 +184,94 @@ export default {
     }
   }
   .page {
-        width: 733px;
-        height: 66px;
-        overflow: hidden;
-        margin:  0 auto;
-        .sui-pagination {
-          margin: 18px 0;
+    width: 733px;
+    height: 66px;
+    overflow: hidden;
+    margin: 0 auto;
+    .sui-pagination {
+      margin: 18px 0;
 
-          ul {
-            margin-left: 0;
-            margin-bottom: 0;
-            vertical-align: middle;
-            width: 490px;
+      ul {
+        margin-left: 0;
+        margin-bottom: 0;
+        vertical-align: middle;
+        // width: 490px;
+        float: left;
+
+        li {
+          line-height: 18px;
+          display: inline-block;
+
+          a {
+            position: relative;
             float: left;
+            line-height: 18px;
+            text-decoration: none;
+            background-color: @deep_backgrd_color;
+            border: 1px solid rgba(142, 148, 154, 0.3);
+            margin-left: -1px;
+            font-size: 14px;
+            padding: 9px 18px;
+            color: @light_font_color;
+          }
 
-            li {
-              line-height: 18px;
-              display: inline-block;
-
-              a {
-                position: relative;
-                float: left;
-                line-height: 18px;
-                text-decoration: none;
-                background-color: @deep_backgrd_color;
-                border: 1px solid rgba(142, 148, 154, 0.3);
-                margin-left: -1px;
-                font-size: 14px;
-                padding: 9px 18px;
-                color: @light_font_color;
-              }
-
-              &.active {
-                a {
-                  background-color: @deep_backgrd_color;
-                  color: #fff;
-                  border-color: rgba(142, 148, 154, 0.3);
-                  cursor: default;
-                }
-              }
-
-              &.prev {
-                a {
-                  background-color: @deep_backgrd_color;
-                }
-              }
-
-              &.disabled {
-                a {
-                  color: #999;
-                  cursor: default;
-                }
-              }
-
-              &.dotted {
-                span {
-                  margin-left: -1px;
-                  position: relative;
-                  float: left;
-                  line-height: 18px;
-                  text-decoration: none;
-                  background-color: @light_backgrd_color;
-                  font-size: 14px;
-                  border-left: 1px solid @light_border_color;
-                  border-right: 1px solid @light_border_color;
-                  padding: 9px 18px;
-                  color: @light_font_color;
-                }
-              }
-
-              &.next {
-                a {
-                  background-color: @deep_backgrd_color;
-                }
-              }
+          &.active {
+            a {
+              background-color: @deep_backgrd_color;
+              color: #fff;
+              border-color: rgba(142, 148, 154, 0.3);
+              cursor: default;
             }
           }
-          div {
-            color: @light_font_color;
-            line-height: 14px;
-            font-size: 14px;
-            float: right;
-            width: 241px;
+
+          &.prev {
+            a {
+              background-color: @deep_backgrd_color;
+            }
+          }
+
+          &.disabled {
+            a {
+              color: #999;
+              cursor: default;
+            }
+          }
+
+          &.dotted {
             span {
-              display: block;
-              margin-top: 10px;
+              margin-left: -1px;
+              position: relative;
+              float: left;
+              line-height: 18px;
+              text-decoration: none;
+              background-color: @light_backgrd_color;
+              font-size: 14px;
+              border-left: 1px solid @light_border_color;
+              border-right: 1px solid @light_border_color;
+              padding: 9px 18px;
+              color: @light_font_color;
+            }
+          }
+
+          &.next {
+            a {
+              background-color: @deep_backgrd_color;
             }
           }
         }
       }
+      div {
+        color: @light_font_color;
+        line-height: 14px;
+        font-size: 14px;
+        float: right;
+        width: 241px;
+        span {
+          display: block;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
 }
 </style>

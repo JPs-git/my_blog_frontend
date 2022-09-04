@@ -10,4 +10,4 @@ export const reqArticleById = (id) => requests({url:`articles/${id}`, method:'ge
 // 新增评论
 export const reqNewComment = data => requests({url:'comments', method:'post', data})
 // 获取留言板评论 
-export const reqMsgboard = () => requests({url:'comments/msgboard', method:'get'})
+export const reqMsgboard = (skip) => requests({url:`comments/msgboard?skip=${skip}`, method:'get'})

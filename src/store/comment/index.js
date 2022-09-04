@@ -4,8 +4,8 @@ const actions = {
   async newComment({commit}, data){
     const result = await reqNewComment(data)
   },
-  async getMsgboard({commit}){
-    const result = await reqMsgboard()
+  async getMsgboard({commit}, skip){
+    const result = await reqMsgboard(skip)
     commit('GETMSGBOARD', result)
   }
 }
@@ -13,10 +13,12 @@ const actions = {
 const mutations = {
   GETMSGBOARD(state, result){
     state.MsgBoard = result.data.findResult
+    state.total = result.data.total
   }
 }
 const state = {
-  MsgBoard:[]
+  MsgBoard:[],
+  total:1 
 }
 const getters = {}
 
