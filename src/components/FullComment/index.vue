@@ -15,7 +15,9 @@
               </div>
             </div>
             <div class="content">
-              {{ comment.context }}
+              <p>
+                {{ comment.context }}
+              </p>
               <div class="date">
                 {{ pubTime(comment.pub_date) }}
               </div>
@@ -91,6 +93,11 @@ export default {
       this.$store.dispatch('comment/getMsgboard', this.skip)
       this.$bus.$emit('goTop')
     },
+    // 刷新页面同时返回第一页
+    refreshAndGoPageOne(){
+      this.skip = 0
+      this.refreshPage()
+    },
     // 切换分页
     switchPage(e){
       const el = e.target.parentNode
@@ -136,7 +143,7 @@ export default {
   },
   mounted() {
     this.refreshPage()
-    this.$bus.$on('refresh_comment', this.refreshPage)
+    this.$bus.$on('refresh_comment', this.refreshAndGoPageOne)
   },
 }
 </script>
@@ -171,11 +178,16 @@ export default {
       }
     }
     .content {
+      p{
+        word-wrap: break-word;
+        word-break: break-all;
+      }
       font-size: 18px;
       color: rgb(189, 195, 202);
       border-bottom: 1px solid rgba(142, 148, 154, 0.3);
       margin-top: 20px;
       padding-bottom: 20px;
+      overflow:wrap;
       .date {
         font-size: 14px;
         color: rgb(149, 153, 156);
