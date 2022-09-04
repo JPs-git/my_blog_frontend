@@ -218,9 +218,7 @@ export default {
               }
             }
           }
-
           div {
-
             color: @light_font_color;
             line-height: 14px;
             font-size: 14px;
