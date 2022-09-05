@@ -1,18 +1,22 @@
 <template>
-  <div class="article">
+  <div>
+    <div class="article">
     <ArticleContent/>
+    </div>
+    <FullComment/>
   </div>
+ 
 </template>
 
 <script>
 import ArticleContent from '@/components/ArticleContent/index.vue'
-import Comments from '@/components/Comments/index.vue'
+import FullComment from '@/components/FullComment/index.vue'
 
 export default {
   name:'Article',
   components:{
     ArticleContent,
-    Comments,
+    FullComment,
 }
 }
 </script>

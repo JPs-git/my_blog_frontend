@@ -20,9 +20,9 @@
     <div class="btns">
       &nbsp;&nbsp;&nbsp;
       <i class="fas fa-eye"></i> {{ article.views }}&nbsp;&nbsp;&nbsp;
-      <a href=""><i class="fas fa-thumbs-up"></i></a>
+      <a href="javascript:;"><i class="fas fa-thumbs-up"></i></a>
       {{ article.likes }}&nbsp;&nbsp;&nbsp;
-      <a href=""><i class="fas fa-comment-dots"></i></a> {{ article.comments }}
+      <a href="javascript:;" @click="goToComment"><i class="fas fa-comment-dots"></i></a> {{ article.comments }}
     </div>
   </div>
 </template>
@@ -64,13 +64,22 @@ export default {
         return md.render(markdown_str)
       }
     },
+    refreshPage(){
+      this.$store.dispatch('article/getArticleById', this.$route.query.id)
+    },
+    // 跳转窗口至评论
+    goToComment(){
+      this.$bus.$emit('goToComment')
+    }
+
   },
   beforeMount() {
     // 清除上次数据 否则会闪一下上次的内容
     this.$store.state.article.article = {}
   },
   mounted() {
-    this.$store.dispatch('article/getArticleById', this.$route.query.id)
+    this.refreshPage()
+    this.$bus.$on('refresh_article_content', this.refreshPage)
   },
 }
 </script>

@@ -88,7 +88,7 @@ export default {
       ) {
         // 发请求
         // 设置评论类型
-        if (this.$route.fullPath === '/msgboard') {
+        if (this.$route.path === '/msgboard') {
           this.commentData.comment_type = 'msgboard'
         } else {
           this.commentData.comment_type = 'article'
@@ -97,6 +97,8 @@ export default {
         await this.$store.dispatch('comment/newComment', this.commentData)
         // 同时更新页面 并回到第一页
         this.$bus.$emit('refresh_comment')
+        // 刷新评论数
+        this.$bus.$emit('refresh_article_content')
       }
     },
     checkNickName() {
@@ -133,7 +135,14 @@ export default {
 
       this.wordsLimit = max_length - input.length
     },
+    // 将窗口移动至评论
+    goToComment(){
+      this.$refs.textarea.focus()
+    }
   },
+  mounted(){
+    this.$bus.$on('goToComment', this.goToComment)
+  }
 }
 </script>
 

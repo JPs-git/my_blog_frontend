@@ -1,10 +1,12 @@
 <template>
   <div id="root">
     <div class="wrapper">
-      <div class="title">留言</div>
+      <div class="title" v-if="$route.path=='/msgboard'">留言</div>
+      <div class="title" v-if="$route.path=='/article'">评论</div>
       <div class="msgList">
         <ul>
-          <li v-for="comment in MsgBoard" :key="comment._id">
+          <li v-if="total === 0">还没有评论哦~</li>
+          <li v-for="comment in findResult" :key="comment._id">
             <div class="first">
               <div class="avatar"></div>
               <div class="nickname">
@@ -69,7 +71,13 @@ export default {
     }
   },
   computed: {
-    ...mapState('comment', ['MsgBoard', 'total']),
+    ...mapState('comment', ['findResult', 'total']),
+  },
+  watch:{
+    // 数据改变时检查按钮禁用状态
+    total(){
+      this.checkDisabled()
+    }
   },
   methods: {
     // 发布时间
@@ -90,7 +98,16 @@ export default {
     },
     // 刷新页面 并回到顶部
     refreshPage() {
-      this.$store.dispatch('comment/getMsgboard', this.skip)
+      // 判断当前路由 决定发哪个请求
+      // msgboard
+      if(this.$route.path === '/msgboard'){
+        this.$store.dispatch('comment/getMsgboard', this.skip)
+      }else if(this.$route.path === '/article'){ 
+        // article
+        this.$store.dispatch('comment/getArticleComments', 
+        {id:this.$route.query.id, skip:this.skip})
+      }
+      this.checkDisabled()
       this.$bus.$emit('goTop')
     },
     // 刷新页面同时返回第一页
@@ -125,8 +142,10 @@ export default {
           this.refreshPage()
         }
       }
-
-      // 判断是否禁用上一页/下一页
+      this.checkDisabled()
+    },
+    // 判断是否禁用上一页/下一页
+    checkDisabled(){
       //先清除
       this.$refs.prev.classList.remove('disabled')
       this.$refs.next.classList.remove('disabled')
@@ -135,8 +154,8 @@ export default {
       if(this.skip === 0){
         this.$refs.prev.classList.add('disabled')
       }
-      // 已经是最后一页则禁用下一页
-      if(this.skip === this.total  - 1){
+      // 没有内容或已经是最后一页则禁用下一页
+      if(this.total === 0 || this.skip === this.total - 1){
         this.$refs.next.classList.add('disabled')
       }
     }
@@ -163,6 +182,10 @@ export default {
     margin-bottom: 20px;
   }
   .msgList {
+    li {
+      font-size: 14px;
+      color: rgb(108, 110, 112);
+    }
     .first {
       .nickname {
         font-size: 14px;
