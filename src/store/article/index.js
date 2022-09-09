@@ -1,4 +1,4 @@
-import { reqTest, reqArticleList, reqArticleById } from "@/api"
+import { reqTest, reqArticleList, reqArticleById, reqToggleLike } from "@/api"
 
 const actions = {
   // 测试
@@ -15,6 +15,10 @@ const actions = {
   async getArticleById({commit}, id){
     const result = await reqArticleById(id)
     commit('GETARTICLEBYID', result)
+  },
+  // 点赞/取消点赞
+  async toggleLike({commit}, {id, like}){
+    const result = await reqToggleLike(id, {like})
   }
 }
 

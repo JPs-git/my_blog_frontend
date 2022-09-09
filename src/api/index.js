@@ -17,3 +17,5 @@ export const reqMsgboard = (skip) =>
 // 获取指定文章评论
 export const reqArticleComments = (id, skip) =>
   requests({ url: `comments/article_id/${id}?skip=${skip}`, method: 'get' })
+// 点赞/取消点赞
+export const reqToggleLike = (id, data) => requests({url:`articles/like/${id}`, data, method:'patch'})

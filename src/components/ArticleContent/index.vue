@@ -8,9 +8,7 @@
       <i class="fas fa-thumbs-up"></i> {{ article.likes }}&nbsp;&nbsp;&nbsp;
       <i class="fas fa-comment-dots"></i>
       {{ article.comments }}&nbsp;&nbsp;&nbsp;
-      <span class="pub-date">
-        发布于 {{ pubDate }}
-        </span>
+      <span class="pub-date"> 发布于 {{ pubDate }} </span>
     </div>
     <div
       class="main markdown-body"
@@ -20,9 +18,14 @@
     <div class="btns">
       &nbsp;&nbsp;&nbsp;
       <i class="fas fa-eye"></i> {{ article.views }}&nbsp;&nbsp;&nbsp;
-      <a href="javascript:;"><i class="fas fa-thumbs-up"></i></a>
-      {{ article.likes }}&nbsp;&nbsp;&nbsp;
-      <a href="javascript:;" @click="goToComment"><i class="fas fa-comment-dots"></i></a> {{ article.comments }}
+      <a href="javascript:;" @click="clickLike" :title="likes_title"
+        ><i class="fas fa-thumbs-up"></i
+      ></a>
+      {{ likes }}&nbsp;&nbsp;&nbsp;
+      <a href="javascript:;" @click="goToComment" title="评论"
+        ><i class="fas fa-comment-dots"></i
+      ></a>
+      {{ article.comments }}
     </div>
   </div>
 </template>
@@ -32,29 +35,27 @@ import MarkdownIt from 'markdown-it'
 import { mapState } from 'vuex'
 import dateFomat from '@/utils/dateFomat'
 export default {
-  // data() {
-  //   return {
-  //     title: '如何搭建自己的博客',
-  //     info: {
-  //       views: 0,
-  //       likes: 0,
-  //       comments: 0,
-  //       pubDate:'2022-7-27'
-  //     },
-  //     // Markdown字符串
-  //     markdownStr:'# This is h1 \n ## This is h2 \n '
-  //   }
-  // },
+  data() {
+    return {
+      is_like_active: false,
+    }
+  },
   computed: {
     // 文章数据
     ...mapState('article', ['article']),
-    pubDate(){
+    pubDate() {
       // 日期格式化
       const date = dateFomat(this.$store.state.article.article.pubDate).fullDate
       const time = dateFomat(this.$store.state.article.article.pubDate).fullTime
       return date + ' ' + time
+    },
+    likes() {
+      return this.is_like_active ? this.article.likes + 1 : this.article.likes
+    },
+    // 点赞按钮的提示
+    likes_title(){
+      return this.is_like_active ? '取消点赞': '点个赞！'
     }
-
   },
   methods: {
     // 渲染Markdown
@@ -64,14 +65,35 @@ export default {
         return md.render(markdown_str)
       }
     },
-    refreshPage(){
+    // 刷新页面
+    refreshPage() {
       this.$store.dispatch('article/getArticleById', this.$route.query.id)
     },
     // 跳转窗口至评论
-    goToComment(){
+    goToComment() {
       this.$bus.$emit('goToComment')
-    }
-
+    },
+    // 点赞
+    clickLike(e) {
+      const el = e.target.parentNode
+      // 未激活
+      el.classList.toggle('active')
+      // 取消点赞
+      if (el.className.indexOf('active') === -1) {
+        this.$store.dispatch('article/toggleLike', {
+          id: this.$route.query.id,
+          like: false,
+        })
+        this.is_like_active = false
+      } else {
+        // 点赞
+        this.$store.dispatch('article/toggleLike', {
+          id: this.$route.query.id,
+          like: true,
+        })
+        this.is_like_active = true
+      }
+    },
   },
   beforeMount() {
     // 清除上次数据 否则会闪一下上次的内容
@@ -120,6 +142,9 @@ export default {
   a {
     color: rgb(96, 97, 115);
     &:hover {
+      color: rgb(131, 132, 141);
+    }
+    &.active {
       color: rgb(131, 132, 141);
     }
   }
