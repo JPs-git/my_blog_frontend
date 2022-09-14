@@ -10,10 +10,11 @@
       {{ article.comments }}&nbsp;&nbsp;&nbsp;
       <span class="pub-date"> 发布于 {{ pubDate }} </span>
     </div>
-    <div
+    <div id="viewer"></div>
+    <!-- <div
       class="main markdown-body"
       v-html="mainContent(article.mainContent)"
-    ></div>
+    ></div> -->
 
     <div class="btns">
       &nbsp;&nbsp;&nbsp;
@@ -31,13 +32,21 @@
 </template>
 
 <script>
-import MarkdownIt from 'markdown-it'
 import { mapState } from 'vuex'
 import dateFomat from '@/utils/dateFomat'
+import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'  // toast-ui viewer
+import '@toast-ui/editor/dist/toastui-editor-viewer.css'  // toast-ui css
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css'
 export default {
   data() {
     return {
       is_like_active: false,
+      viewer:null
+    }
+  },
+  watch:{
+    articleContent(){
+      this.viewer.setMarkdown(this.article.mainContent)
     }
   },
   computed: {
@@ -55,16 +64,12 @@ export default {
     // 点赞按钮的提示
     likes_title(){
       return this.is_like_active ? '取消点赞': '点个赞！'
+    },
+    articleContent(){
+      return this.article.mainContent
     }
   },
   methods: {
-    // 渲染Markdown
-    mainContent(markdown_str) {
-      const md = new MarkdownIt()
-      if (markdown_str) {
-        return md.render(markdown_str)
-      }
-    },
     // 刷新页面
     refreshPage() {
       this.$store.dispatch('article/getArticleById', this.$route.query.id)
@@ -94,6 +99,14 @@ export default {
         this.is_like_active = true
       }
     },
+    initViewer(){
+      const viewer = new Viewer({
+        el: document.querySelector('#viewer'),
+        initialValue: this.article.mainContent,
+        theme: 'dark'
+      })
+      this.viewer = viewer
+    }
   },
   beforeMount() {
     // 清除上次数据 否则会闪一下上次的内容
@@ -102,6 +115,7 @@ export default {
   mounted() {
     this.refreshPage()
     this.$bus.$on('refresh_article_content', this.refreshPage)
+    this.initViewer()
   },
 }
 </script>
