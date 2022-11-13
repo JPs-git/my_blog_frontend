@@ -11,11 +11,6 @@
       <span class="pub-date"> 发布于 {{ pubDate }} </span>
     </div>
     <div id="viewer"></div>
-    <!-- <div
-      class="main markdown-body"
-      v-html="mainContent(article.mainContent)"
-    ></div> -->
-
     <div class="btns">
       &nbsp;&nbsp;&nbsp;
       <i class="fas fa-eye"></i> {{ article.views }}&nbsp;&nbsp;&nbsp;
@@ -120,9 +115,7 @@ export default {
 }
 </script>
 
-<style lang="less">
-@import url(./css/markdown.less);
-</style>
+
 <style lang="less" scoped>
 .article-content {
   // width: 1000px;
